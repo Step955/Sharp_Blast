@@ -25,7 +25,7 @@ public class Game1 : Game
     private TouchCollection touchLocation_old;
 
     private int score = 0;
-    private int highscore = 12320;
+    private int highscore = 0;
 
     public Game1()
     {
@@ -49,6 +49,8 @@ public class Game1 : Game
 
     protected override void LoadContent()
     {
+
+        highscore =  FileManager.load();
 
         resetButtonTexture = Content.Load<Texture2D>("reload");
         font = Content.Load<SpriteFont>("Font");
@@ -101,6 +103,11 @@ public class Game1 : Game
                 {
                     Bricks.generateBricks();
                     Field.pole = new int[8, 8];
+                    if(score > highscore)
+                    {
+                        FileManager.save(score);
+                        highscore = score;
+                    }
                     score = 0;
 
                 }
