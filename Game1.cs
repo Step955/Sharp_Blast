@@ -25,6 +25,7 @@ public class Game1 : Game
     private TouchCollection touchLocation_old;
 
     private int score = 0;
+    private int highscore = 12320;
 
     public Game1()
     {
@@ -125,24 +126,28 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
+        //start draw to custom render target
         GraphicsDevice.SetRenderTarget(screen);
 
         GraphicsDevice.Clear(Color.Transparent);
 
         _spriteBatch.Begin();
 
+        //reset button
         _spriteBatch.Draw(resetButtonTexture, new Rectangle(900, 200, 100, 100), Color.White);
+        
+        //scores
         _spriteBatch.DrawString(font, Convert.ToString(score), new Vector2(100, 300), Color.White, 0, new Vector2(0, 0), 10.0f, SpriteEffects.None,0.5f);
+        _spriteBatch.DrawString(font, Convert.ToString(highscore), new Vector2(100, 200), Color.Gold, 0, new Vector2(0, 0), 5.0f, SpriteEffects.None, 0.5f);
 
-        //_spriteBatch.Draw(Field.pole_texture, new Rectangle(Convert.ToInt32(1040), Convert.ToInt32(2240), 40, 40), Color.White);
-        //_spriteBatch.Draw(Field.pole_texture, new Rectangle(Convert.ToInt32(0), Convert.ToInt32(90), 40, 40), Color.White);
+        //end draw to custom render target
         _spriteBatch.End();
 
         field.render(_spriteBatch);
 
         activeBricks.render(_spriteBatch, GraphicsDevice);
 
-
+        //Final draw to screen
 
         GraphicsDevice.SetRenderTarget(null);
         
