@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
 using static Sharp_Blast.Bricks;
+using static Android.Provider.UserDictionary;
 namespace Sharp_Blast
 {
     public class Field
@@ -72,29 +73,31 @@ namespace Sharp_Blast
                 {
                     if (brick.collidepoint(i, j))
                     {
-                        List<int> cordsX = brick.Blocks[0];
-                        List<int> cordsY = brick.Blocks[1];
 
-                        int[,] pole_filed = (int[,])pole.Clone();
-                        
+                            List<int> cordsX = brick.Blocks[0];
+                            List<int> cordsY = brick.Blocks[1];
 
-                        for (int k = 0; k < cordsX.Count(); k++) {
-                            try
-                            {
-                                if (pole[((i - 150) / 115) + cordsX[k], ((j - 600) / 115) + cordsY[k]] == 0)
+                            int[,] pole_filed = (int[,])pole.Clone();
+
+
+                            for (int k = 0; k < cordsX.Count(); k++) {
+                                try
                                 {
-                                    pole_filed[((i - 150) / 115) + cordsX[k], ((j - 600) / 115) + cordsY[k]] = brick.Color;
+                                    if (pole[((i - 150) / 115) + cordsX[k], ((j - 600) / 115) + cordsY[k]] == 0)
+                                    {
+                                        pole_filed[((i - 150) / 115) + cordsX[k], ((j - 600) / 115) + cordsY[k]] = brick.Color;
+                                    }
+                                    else
+                                    {
+                                        return;
+                                    }
                                 }
-                                else
+                                catch
                                 {
                                     return;
-                                }
+                                }    
                             }
-                            catch
-                            {
-                                return;
-                            }    
-                        }
+  
                         Bricks.ActiveBricks[Bricks.grabed] = Bricks.BlockFactory.getEmpty(Bricks.grabed);
                         pole = pole_filed;
                         Bricks.checkEmpty();
@@ -104,6 +107,45 @@ namespace Sharp_Blast
             }
         }
 
+        public static bool blockfit(Bricks.Brick brick)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for(int j = 0; j < 8; j++)
+                {
+                    if (pole[i, j] == 0)
+                    {
+                        if(brick_check(i, j))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+
+            bool brick_check(int i, int j)
+            {
+                List<int> cordsX = brick.Blocks[0];
+                List<int> cordsY = brick.Blocks[1];
+                for (int k = 0; k < cordsX.Count(); k++)
+                {
+                    try
+                    {
+                        if (pole[i + cordsX[k], j + cordsY[k]] != 0)
+                        {
+                            return false;
+                        }
+                    }
+                    catch
+                    {
+                        return false;
+                    } 
+                }
+                return true;
+            }
+                
+        }
         public int checkField()
         {
             int[,] clearedField = new int[8,8];

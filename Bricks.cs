@@ -601,7 +601,17 @@ namespace Sharp_Blast
             public static Brick PickRandomClass(int place)
             {
                 int index = random.Next(blockTypes.Length);
-                return (Brick)Activator.CreateInstance(blockTypes[index], place);
+
+                Brick brick = (Brick)Activator.CreateInstance(blockTypes[index], place);
+
+                while(Field.blockfit(brick) != true)
+                {
+                    index = random.Next(blockTypes.Length);
+
+                    brick = (Brick)Activator.CreateInstance(blockTypes[index], place);
+                }
+                return brick;
+                
             }
 
             public static Brick getEmpty(int place)
