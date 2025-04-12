@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="Sharp_Blast.Sharp_Blast" android:versionCode="1" android:versionName="1.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="Sharp_Blast.Sharp_Blast" android:versionCode="1" android:versionName="1.1">
 	<uses-feature android:glEsVersion="0x00020000" android:required="true" />
 	<application android:label="Sharp_Blast"></application>
 </manifest>
