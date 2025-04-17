@@ -176,7 +176,7 @@ namespace Sharp_Blast
                     for (int i = 0; i < cordsX.Count(); i++)
                     {
 
-                        Squares.render(_spriteBatch, new Microsoft.Xna.Framework.Vector2(Rect.X + (100 * cordsX[i]), Rect.Y + (100 * cordsY[i])), Color, 100);
+                        Squares.render(_spriteBatch, new Microsoft.Xna.Framework.Vector2(Rect.X + (110 * cordsX[i]), Rect.Y + (110 * cordsY[i])), Color, 110);
                     }
                 }
                 else
