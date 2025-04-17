@@ -15,6 +15,8 @@ namespace Sharp_Blast
 {
     public class Bricks
     {
+        public static int[,] prediction = new int[8,8];
+
         static Squares squares;
 
         public static Brick[] ActiveBricks;
@@ -56,6 +58,8 @@ namespace Sharp_Blast
 
         public static void generateBricks()
         {
+            prediction = (int[,])Field.pole.Clone();
+            
             ActiveBricks = [BlockFactory.PickRandomClass(0), BlockFactory.PickRandomClass(1), BlockFactory.PickRandomClass(2)];
             
             // kód pro manuální nastavení přiřazených kostek
