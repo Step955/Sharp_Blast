@@ -1,15 +1,9 @@
-﻿using Android.Icu.Number;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.XPath;
 
 namespace Sharp_Blast
 {
@@ -64,7 +58,7 @@ namespace Sharp_Blast
             
             // kód pro manuální nastavení přiřazených kostek
 
-            //ActiveBricks = [(Brick)Activator.CreateInstance(typeof(LitleEL4), 0), (Brick)Activator.CreateInstance(typeof(LitleEL2), 1), (Brick)Activator.CreateInstance(typeof(LitleEL3), 2)];
+            //ActiveBricks = [(Brick)Activator.CreateInstance(typeof(blockSlash1), 0), (Brick)Activator.CreateInstance(typeof(blockSlash2), 1), (Brick)Activator.CreateInstance(typeof(blockslash2), 2)];
 
         }
 
@@ -166,8 +160,7 @@ namespace Sharp_Blast
                 else
                 {
                     return false;
-                }
-                
+                }  
             }
 
             public void render(SpriteBatch _spriteBatch, bool big = false)
@@ -179,8 +172,7 @@ namespace Sharp_Blast
                 {
                     for (int i = 0; i < cordsX.Count(); i++)
                     {
-
-                        Squares.render(_spriteBatch, new Microsoft.Xna.Framework.Vector2(Rect.X + (100 * cordsX[i]), Rect.Y + (100 * cordsY[i])), Color, 100);
+                        Squares.render(_spriteBatch, new Microsoft.Xna.Framework.Vector2(Rect.X + (115 * cordsX[i]), Rect.Y + (115 * cordsY[i])), Color, 110);
                     }
                 }
                 else
@@ -584,6 +576,94 @@ namespace Sharp_Blast
             }
         }
 
+        public class blockx : Brick
+        {
+            public blockx(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1, 1, -1, -1 },
+                new List<int> { 0, 1, -1, 1, -1 }
+                };
+            }
+        }
+
+        public class blockX : Brick
+        {
+            public blockX(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1, 1, -1, -1 , 2, 2, -2, -2},
+                new List<int> { 0, -1, 1, 1, -1 , 2, -2, 2, -2}
+                };
+            }
+        }
+
+        public class blockslash1 : Brick
+        {
+            public blockslash1(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1, -1},
+                new List<int> { 0, 1, -1}
+                };
+            }
+        }
+
+        public class blockslash2 : Brick
+        {
+            public blockslash2(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1, -1},
+                new List<int> { 0, -1, 1}
+                };
+            }
+        }
+
+        public class blockSlash1 : Brick
+        {
+            public blockSlash1(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1, -1, 2},
+                new List<int> { 0, 1, -1, 2}
+                };
+            }
+        }
+
+        public class blockSlash2 : Brick
+        {
+            public blockSlash2(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1, -1, -2},
+                new List<int> { 0, -1, 1,  2}
+                };
+            }
+        }
+
+        public class blockSLASH1: Brick
+        {
+            public blockSLASH1(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1, -1, 2, -2},
+                new List<int> { 0, 1, -1, 2, -2}
+                };
+            }
+        }
+
+        public class blockSLASH2 : Brick
+        {
+            public blockSLASH2(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1, -1, 2, -2},
+                new List<int> { 0, -1, 1, -2, 2}
+                };
+            }
+        }
+
         public static class BlockFactory
         {
             private static readonly Random random = new Random();
@@ -599,7 +679,10 @@ namespace Sharp_Blast
             typeof(Z1), typeof(Z2), typeof(Z3), typeof(Z4),
             typeof(smallT1), typeof(smallT2), typeof(smallT3), typeof(smallT4),
             typeof(T1), typeof(T2), typeof(T3), typeof(T4),
-            typeof(cube22), typeof(cube32), typeof(cube33)
+            typeof(cube22), typeof(cube32), typeof(cube33),
+            typeof(blockx), typeof(blockX),
+            typeof(blockslash1), typeof(blockslash2),
+            typeof(blockSLASH1), typeof(blockSLASH2),
         };
 
             public static Brick PickRandomClass(int place)

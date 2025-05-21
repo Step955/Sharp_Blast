@@ -44,6 +44,12 @@ namespace Sharp_Blast
 
         }
 
+        protected override void OnStop()
+        {
+            Game1.exit();
+            base.OnStop();
+        }
+
         private void HideSystemUI()
         {
             Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(
