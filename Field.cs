@@ -3,10 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
-using static Sharp_Blast.Bricks;
 namespace Sharp_Blast
 {
     public class Field
@@ -63,40 +60,27 @@ namespace Sharp_Blast
             }
             */
         }
+
+        // Funkce pro umístění kostky na pole po pustění hráčem
         public void place()
         {
             Bricks.Brick brick = Bricks.ActiveBricks[Bricks.grabed];
 
-            for (int i = 150; i < 990; i += 115) { 
-                for(int j = 600; j < 1500; j += 115)
+            for (int i = 150; i < 990; i += 115)
+            {
+                for (int j = 600; j < 1500; j += 115)
                 {
                     if (brick.collidepoint(i, j))
                     {
-                        List<int> cordsX = brick.Blocks[0];
-                        List<int> cordsY = brick.Blocks[1];
+                        (bool, int[,]) result = brick_fill(((i - 150) / 115), ((j - 600) / 115), pole, brick.Blocks[0], brick.Blocks[1], brick.Color);
 
-                        int[,] pole_filed = (int[,])pole.Clone();
-                        
-
-                        for (int k = 0; k < cordsX.Count(); k++) {
-                            try
-                            {
-                                if (pole[((i - 150) / 115) + cordsX[k], ((j - 600) / 115) + cordsY[k]] == 0)
-                                {
-                                    pole_filed[((i - 150) / 115) + cordsX[k], ((j - 600) / 115) + cordsY[k]] = brick.Color;
-                                }
-                                else
-                                {
-                                    return;
-                                }
-                            }
-                            catch
-                            {
-                                return;
-                            }    
+                        if (!result.Item1)
+                        {
+                            return;
                         }
+
+                        pole = result.Item2;
                         Bricks.ActiveBricks[Bricks.grabed] = Bricks.BlockFactory.getEmpty(Bricks.grabed);
-                        pole = pole_filed;
                         Bricks.checkEmpty();
                         return;
                     }
@@ -104,19 +88,67 @@ namespace Sharp_Blast
             }
         }
 
-        public int checkField()
+        //ověření zda se kostka vejde na pole při vygenerování
+
+        public static bool blockfit(Bricks.Brick brick)
         {
-            int[,] clearedField = new int[8,8];
-            for (int i = 0; i < pole.GetLength(0); i++)
+
+            for (int i = 0; i < 8; i++)
             {
-                for (int j = 0; j < pole.GetLength(1); j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    clearedField[i, j] = pole[i, j];
+                    if (Bricks.prediction[i, j] == 0)
+                    {
+                        (bool, int[,]) result = brick_fill(i, j, Bricks.prediction, brick.Blocks[0], brick.Blocks[1], brick.Color);
+
+                        if (result.Item1)
+                        {
+                            Bricks.prediction = result.Item2;
+                            return true;
+                        }
+                    }
                 }
             }
+            return false;
+        }
+
+        // Funkce pro naplnění pole kostkou
+        public static (bool, int[,]) brick_fill(int i, int j, int[,] pole_check, List<int> cordsX, List<int> cordsY, int color)
+        {
+            int[,] pole_filed = (int[,])pole_check.Clone();
+
+            for (int k = 0; k < cordsX.Count(); k++)
+            {
+                try
+                {
+                    if (pole_check[i + cordsX[k], j + cordsY[k]] == 0)
+                    {
+                        pole_filed[i + cordsX[k], j + cordsY[k]] = color;
+                    }
+                    else
+                    {
+                        return (false, pole_check);
+                    }
+                }
+                catch
+                {
+                    return (false, pole_check);
+                }
+            }
+            return (true, pole_filed);
+        }
+
+        //funkce pro kontrolu plnosti pole
+        public int checkField()
+        {
+            //tvorba potřebných proměných
+            int[,] clearedField = (int[,])pole.Clone();
+
             bool contains = false;
             int score = 0;
-            for(int i = 0; i<pole.GetLength(0) ;i++)
+
+            // Kontrola řádků            
+            for (int i = 0; i < pole.GetLength(0); i++)
             {
                 for (int j = 0; j < pole.GetLength(1); j++)
                 {
@@ -133,7 +165,7 @@ namespace Sharp_Blast
 
                 if (contains == false)
                 {
-                    for(int j = 0; j< pole.GetLength(1); j++)
+                    for (int j = 0; j < pole.GetLength(1); j++)
                     {
                         clearedField[i, j] = 0;
                     }
@@ -143,7 +175,8 @@ namespace Sharp_Blast
             }
 
             contains = false;
-            
+
+            // Kontrola sloupců
             for (int i = 0; i < pole.GetLength(0); i++)
             {
 
@@ -153,7 +186,8 @@ namespace Sharp_Blast
                     {
                         contains = true;
                         break;
-                    }else
+                    }
+                    else
                     {
                         contains = false;
                     }
@@ -171,9 +205,7 @@ namespace Sharp_Blast
             }
 
             pole = clearedField;
-            
             return score;
         }
-
     }
 }

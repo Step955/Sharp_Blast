@@ -1,5 +1,4 @@
-﻿using Android.Text.Method;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -24,7 +23,7 @@ public class Game1 : Game
 
     private TouchCollection touchLocation_old;
 
-    private int score = 0;
+    private static int score = 0;
     private int highscore = 0;
 
     public Game1()
@@ -32,6 +31,12 @@ public class Game1 : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+    }
+
+    public static void exit()
+    {
+        
+        FileManager.save(score);
     }
 
     protected override void Initialize()
@@ -114,7 +119,7 @@ public class Game1 : Game
             }
             else if(Bricks.grabed > -1)
             {
-                Bricks.ActiveBricks[Bricks.grabed].setCords(Convert.ToInt32(touchLocation[0].Position.X-((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 490)), Convert.ToInt32(touchLocation[0].Position.Y-((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1090)));
+                Bricks.ActiveBricks[Bricks.grabed].setCords(Convert.ToInt32(touchLocation[0].Position.X-((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 490)), Convert.ToInt32(touchLocation[0].Position.Y-((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1090)-300));
             }
 
         }else if(touchLocation.Count == 0 && touchLocation_old.Count > 0 && Bricks.grabed > -1)
