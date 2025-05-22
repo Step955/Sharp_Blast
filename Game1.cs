@@ -4,173 +4,178 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
 
-namespace Sharp_Blast;
-
-public class Game1 : Game
+namespace Sharp_Blast
 {
-    private Bricks activeBricks;
 
-    private Field field;
-
-    public static RenderTarget2D screen;
-
-    SpriteFont font;
-
-    Texture2D resetButtonTexture;
-
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
-
-    private TouchCollection touchLocation_old;
-
-    private static int score = 0;
-    private int highscore = 0;
-
-    public Game1()
+    public class Game1 : Game
     {
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
-    }
+        private Bricks activeBricks;
 
-    public static void exit()
-    {
-        
-        FileManager.save(score);
-    }
+        private Field field;
 
-    protected override void Initialize()
-    {
-        touchLocation_old = TouchPanel.GetState();
+        public static RenderTarget2D screen;
 
-        screen = new RenderTarget2D(GraphicsDevice, 1080, 2280);
+        SpriteFont font;
 
-        _spriteBatch = new SpriteBatch(base.GraphicsDevice);
+        Texture2D resetButtonTexture;
 
-        base.Initialize();
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
 
-        GraphicsDevice.Viewport = new Viewport(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
-    }
+        private TouchCollection touchLocation_old;
 
-    protected override void LoadContent()
-    {
+        private static int score = 0;
+        private static int highscore = 0;
 
-        highscore =  FileManager.load();
-
-        resetButtonTexture = Content.Load<Texture2D>("reload");
-        font = Content.Load<SpriteFont>("Font");
-        
-        field = new Field(Content);
-        activeBricks = new Bricks(Content);
-        
-        // TODO: use this.Content to load your game content here
-    }
-
-    protected override void Update(GameTime gameTime)
-    {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
-
-        //field = new Field(Content);
-
-        // TODO: Add your update logic here
-
-        //activeBricks.generateBricks();
-
-        TouchCollection touchLocation = TouchPanel.GetState();
-        
-        if (touchLocation.Count > 0)
+        public Game1()
         {
-            
-            //Bricks.ActiveBricks[0].setCords(Convert.ToInt32(touchLocation[0].Position.X), Convert.ToInt32(touchLocation[0].Position.Y));
-
-            if (touchLocation_old.Count == 0)
-            {
-                if (touchLocation[0].Position.Y > 1700)
-                {
-
-                    if (touchLocation[0].Position.X < GraphicsDevice.PresentationParameters.BackBufferWidth / 3)
-                    {
-                        Bricks.grabed = 0;
-                    }
-                    else if (touchLocation[0].Position.X < (GraphicsDevice.PresentationParameters.BackBufferWidth / 3) * 2)
-                    {
-                        Bricks.grabed = 1;
-                    }
-                    else
-                    {
-                        Bricks.grabed = 2;                       
-                    }
-                }
-                else if (new Rectangle(900+ ((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 540), 200+ ((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1140), 100, 100).Contains(touchLocation[0].Position))
-                {
-                    Bricks.generateBricks();
-                    Field.pole = new int[8, 8];
-                    if(score > highscore)
-                    {
-                        FileManager.save(score);
-                        highscore = score;
-                    }
-                    score = 0;
-
-                }
-            }
-            else if(Bricks.grabed > -1)
-            {
-                Bricks.ActiveBricks[Bricks.grabed].setCords(Convert.ToInt32(touchLocation[0].Position.X-((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 490)), Convert.ToInt32(touchLocation[0].Position.Y-((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1090)-300));
-            }
-
-        }else if(touchLocation.Count == 0 && touchLocation_old.Count > 0 && Bricks.grabed > -1)
-        {
-            field.place();
-            Bricks.ActiveBricks[Bricks.grabed].resetCords(Bricks.grabed);
-            Bricks.grabed = -1;
+            _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            IsMouseVisible = true;
         }
+
+        public static void exit()
+        {
+            if (score > highscore)
+            {
+                FileManager.save(score);
+            }
+        }
+
+        protected override void Initialize()
+        {
+            touchLocation_old = TouchPanel.GetState();
+
+            screen = new RenderTarget2D(GraphicsDevice, 1080, 2280);
+
+            _spriteBatch = new SpriteBatch(base.GraphicsDevice);
+
+            base.Initialize();
+
+            GraphicsDevice.Viewport = new Viewport(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
+        }
+
+        protected override void LoadContent()
+        {
+
+            highscore = FileManager.load();
+
+            resetButtonTexture = Content.Load<Texture2D>("reload");
+            font = Content.Load<SpriteFont>("Font");
+
+            field = new Field(Content);
+            activeBricks = new Bricks(Content);
+
+            // TODO: use this.Content to load your game content here
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+
+            //field = new Field(Content);
+
+            // TODO: Add your update logic here
+
+            //activeBricks.generateBricks();
+
+            TouchCollection touchLocation = TouchPanel.GetState();
+
+            if (touchLocation.Count > 0)
+            {
+
+                //Bricks.ActiveBricks[0].setCords(Convert.ToInt32(touchLocation[0].Position.X), Convert.ToInt32(touchLocation[0].Position.Y));
+
+                if (touchLocation_old.Count == 0)
+                {
+                    if (touchLocation[0].Position.Y > 1700)
+                    {
+
+                        if (touchLocation[0].Position.X < GraphicsDevice.PresentationParameters.BackBufferWidth / 3)
+                        {
+                            Bricks.grabed = 0;
+                        }
+                        else if (touchLocation[0].Position.X < (GraphicsDevice.PresentationParameters.BackBufferWidth / 3) * 2)
+                        {
+                            Bricks.grabed = 1;
+                        }
+                        else
+                        {
+                            Bricks.grabed = 2;
+                        }
+                    }
+                    else if (new Rectangle(900 + ((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 540), 200 + ((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1140), 100, 100).Contains(touchLocation[0].Position))
+                    {
+                        Bricks.generateBricks();
+                        Field.pole = new int[8, 8];
+                        if (score > highscore)
+                        {
+                            FileManager.save(score);
+                            highscore = score;
+                        }
+                        score = 0;
+
+                    }
+                }
+                else if (Bricks.grabed > -1)
+                {
+                    Bricks.ActiveBricks[Bricks.grabed].setCords(Convert.ToInt32(touchLocation[0].Position.X - ((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 490)), Convert.ToInt32(touchLocation[0].Position.Y - ((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1090) - 300));
+                }
+
+            }
+            else if (touchLocation.Count == 0 && touchLocation_old.Count > 0 && Bricks.grabed > -1)
+            {
+                field.place();
+                Bricks.ActiveBricks[Bricks.grabed].resetCords(Bricks.grabed);
+                Bricks.grabed = -1;
+            }
 
             touchLocation_old = touchLocation;
 
-        score += field.checkField();
+            score += field.checkField();
 
-        base.Update(gameTime);
-    }
+            base.Update(gameTime);
+        }
 
-    protected override void Draw(GameTime gameTime)
-    {
-        //start draw to custom render target
-        GraphicsDevice.SetRenderTarget(screen);
+        protected override void Draw(GameTime gameTime)
+        {
+            //start draw to custom render target
+            GraphicsDevice.SetRenderTarget(screen);
 
-        GraphicsDevice.Clear(Color.Transparent);
+            GraphicsDevice.Clear(Color.Transparent);
 
-        _spriteBatch.Begin();
+            _spriteBatch.Begin();
 
-        //reset button
-        _spriteBatch.Draw(resetButtonTexture, new Rectangle(900, 200, 100, 100), Color.White);
-        
-        //scores
-        _spriteBatch.DrawString(font, Convert.ToString(score), new Vector2(100, 300), Color.White, 0, new Vector2(0, 0), 10.0f, SpriteEffects.None,0.5f);
-        _spriteBatch.DrawString(font, Convert.ToString(highscore), new Vector2(100, 200), Color.Gold, 0, new Vector2(0, 0), 5.0f, SpriteEffects.None, 0.5f);
+            //reset button
+            _spriteBatch.Draw(resetButtonTexture, new Rectangle(900, 200, 100, 100), Color.White);
 
-        //end draw to custom render target
-        _spriteBatch.End();
+            //scores
+            _spriteBatch.DrawString(font, Convert.ToString(score), new Vector2(100, 300), Color.White, 0, new Vector2(0, 0), 10.0f, SpriteEffects.None, 0.5f);
+            _spriteBatch.DrawString(font, Convert.ToString(highscore), new Vector2(100, 200), Color.Gold, 0, new Vector2(0, 0), 5.0f, SpriteEffects.None, 0.5f);
 
-        field.render(_spriteBatch);
+            //end draw to custom render target
+            _spriteBatch.End();
 
-        activeBricks.render(_spriteBatch, GraphicsDevice);
+            field.render(_spriteBatch);
 
-        //Final draw to screen
+            activeBricks.render(_spriteBatch, GraphicsDevice);
 
-        GraphicsDevice.SetRenderTarget(null);
-        
-        GraphicsDevice.Clear(new Color(66, 90, 164));
+            //Final draw to screen
 
-        _spriteBatch.Begin();
+            GraphicsDevice.SetRenderTarget(null);
 
-        _spriteBatch.Draw(screen, new Vector2(((GraphicsDevice.PresentationParameters.BackBufferWidth/2)-540), ((GraphicsDevice.PresentationParameters.BackBufferHeight/2)-1140)), Color.White);
+            GraphicsDevice.Clear(new Color(66, 90, 164));
 
-        _spriteBatch.End();
+            _spriteBatch.Begin();
 
-        base.Draw(gameTime);
+            _spriteBatch.Draw(screen, new Vector2(((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 540), ((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1140)), Color.White);
+
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
     }
 }

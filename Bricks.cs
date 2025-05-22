@@ -58,7 +58,7 @@ namespace Sharp_Blast
             
             // kód pro manuální nastavení přiřazených kostek
 
-            //ActiveBricks = [(Brick)Activator.CreateInstance(typeof(blockSlash1), 0), (Brick)Activator.CreateInstance(typeof(blockSlash2), 1), (Brick)Activator.CreateInstance(typeof(blockslash2), 2)];
+            //ActiveBricks = [(Brick)Activator.CreateInstance(typeof(EL5), 0), (Brick)Activator.CreateInstance(typeof(EL6), 1), (Brick)Activator.CreateInstance(typeof(EL8), 2)];
 
         }
 
@@ -363,6 +363,50 @@ namespace Sharp_Blast
                 Blocks = new List<List<int>> {
             new List<int> { 0, -1, 1, 1 },
             new List<int> { 0, 0, -1, 0 }
+        };
+            }
+        }
+
+        public class EL5 : Brick
+        {
+            public EL5(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                    new List<int> { 0, 0, 1, 0 },
+                    new List<int> { 0, 1, 1, -1 },    
+        };
+            }
+        }
+
+        public class EL6 : Brick
+        {
+            public EL6(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                    new List<int> { 0, 0, 0, 1 },
+                    new List<int> { 0, -1, 1, -1 } 
+        };
+            }
+        }
+
+        public class EL7 : Brick
+        {
+            public EL7(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                    new List<int> { 0, 0, -1, 0 },
+                    new List<int> { 0, -1, -1, 1 }
+        };
+            }
+        }
+
+        public class EL8 : Brick
+        {
+            public EL8(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                    new List<int> { 0, 0, -1, 0 },
+                    new List<int> { 0, -1, 1, 1 }
         };
             }
         }
@@ -674,7 +718,7 @@ namespace Sharp_Blast
             typeof(FourHor), typeof(FourVer),
             typeof(FiveHor), typeof(FiveVer),
             typeof(LitleEL), typeof(LitleEL2), typeof(LitleEL3), typeof(LitleEL4),
-            typeof(EL), typeof(EL2), typeof(EL3), typeof(EL4),
+            typeof(EL), typeof(EL2), typeof(EL3), typeof(EL4), typeof(EL5), typeof(EL6), typeof(EL7), typeof(EL8),
             typeof(BEL), typeof(BEL2), typeof(BEL3), typeof(BEL4),
             typeof(Z1), typeof(Z2), typeof(Z3), typeof(Z4),
             typeof(smallT1), typeof(smallT2), typeof(smallT3), typeof(smallT4),
