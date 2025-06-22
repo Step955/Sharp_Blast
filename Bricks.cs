@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Sharp_Blast
@@ -17,9 +18,13 @@ namespace Sharp_Blast
 
         public static int grabed = -1;
 
-        public Bricks(ContentManager content)
+        public static GraphicsDevice GraphicsDevice;
+        
+
+        public Bricks(ContentManager content, GraphicsDevice graphicsDevice)
         {
             squares = new Squares(content);
+            GraphicsDevice = graphicsDevice;
             generateBricks();
         }
 
@@ -86,7 +91,7 @@ namespace Sharp_Blast
                 DarkBlue = content.Load<Texture2D>("bricks\\dark_blue");
                 Green = content.Load<Texture2D>("bricks\\green");
                 Orange = content.Load<Texture2D>("bricks\\orange");
-                Red = content.Load<Texture2D>("bricks\\Red");
+                Red = content.Load<Texture2D>("bricks\\red");
                 Yellow = content.Load<Texture2D>("bricks\\yellow");
                 Purple = content.Load<Texture2D>("bricks\\purple");
             }
@@ -132,11 +137,12 @@ namespace Sharp_Blast
             public int Color;
             public Rectangle Rect;
             public List<List<int>> Blocks { get; protected set; }
-
+            
             protected Brick(int Place)
             {
                 Color = random.Next(1, 8);
-                Rect = new Rectangle(180 + (320 * Place), y, 100, 100);
+                Rect = new Rectangle(((Bricks.GraphicsDevice.PresentationParameters.BackBufferWidth / 4) * (Place + 1)), y, 100, 100);
+                //Rect = new Rectangle(180 + (320 * Place), y, 100, 100);
             }
 
             public void setCords(int x, int y)
@@ -179,7 +185,7 @@ namespace Sharp_Blast
                 {
                     for (int i = 0; i < cordsX.Count(); i++)
                     {
-                        Squares.render(_spriteBatch, new Microsoft.Xna.Framework.Vector2(Rect.X + (75 * cordsX[i]), Rect.Y + (75 * cordsY[i])), Color, 75);
+                        Squares.render(_spriteBatch, new Microsoft.Xna.Framework.Vector2(Rect.X + (50 * cordsX[i]), Rect.Y + (50 * cordsY[i])), Color, 50);
                     }
                 }
                 
@@ -642,9 +648,31 @@ namespace Sharp_Blast
             }
         }
 
-        public class blockslash1 : Brick
+        public class blockSlash2_1 : Brick
         {
-            public blockslash1(int place) : base(place)
+            public blockSlash2_1(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, -1},
+                new List<int> { 0, -1}
+                };
+            }
+        }
+
+        public class blockSlash2_2 : Brick
+        {
+            public blockSlash2_2(int place) : base(place)
+            {
+                Blocks = new List<List<int>> {
+                new List<int> { 0, 1},
+                new List<int> { 0, -1}
+                };
+            }
+        }
+
+        public class blockslash3_1 : Brick
+        {
+            public blockslash3_1(int place) : base(place)
             {
                 Blocks = new List<List<int>> {
                 new List<int> { 0, 1, -1},
@@ -653,9 +681,9 @@ namespace Sharp_Blast
             }
         }
 
-        public class blockslash2 : Brick
+        public class blockslash3_2 : Brick
         {
-            public blockslash2(int place) : base(place)
+            public blockslash3_2(int place) : base(place)
             {
                 Blocks = new List<List<int>> {
                 new List<int> { 0, 1, -1},
@@ -664,9 +692,9 @@ namespace Sharp_Blast
             }
         }
 
-        public class blockSlash1 : Brick
+        public class blockSlash4_1 : Brick
         {
-            public blockSlash1(int place) : base(place)
+            public blockSlash4_1(int place) : base(place)
             {
                 Blocks = new List<List<int>> {
                 new List<int> { 0, 1, -1, 2},
@@ -675,9 +703,9 @@ namespace Sharp_Blast
             }
         }
 
-        public class blockSlash2 : Brick
+        public class blockSlash4_2 : Brick
         {
-            public blockSlash2(int place) : base(place)
+            public blockSlash4_2(int place) : base(place)
             {
                 Blocks = new List<List<int>> {
                 new List<int> { 0, 1, -1, -2},
@@ -686,9 +714,9 @@ namespace Sharp_Blast
             }
         }
 
-        public class blockSLASH1: Brick
+        public class blockSlash5_1: Brick
         {
-            public blockSLASH1(int place) : base(place)
+            public blockSlash5_1(int place) : base(place)
             {
                 Blocks = new List<List<int>> {
                 new List<int> { 0, 1, -1, 2, -2},
@@ -697,9 +725,9 @@ namespace Sharp_Blast
             }
         }
 
-        public class blockSLASH2 : Brick
+        public class blockSlash5_2 : Brick
         {
-            public blockSLASH2(int place) : base(place)
+            public blockSlash5_2(int place) : base(place)
             {
                 Blocks = new List<List<int>> {
                 new List<int> { 0, 1, -1, 2, -2},
@@ -713,20 +741,38 @@ namespace Sharp_Blast
             private static readonly Random random = new Random();
             private static readonly Type[] blockTypes =
             {
-            typeof(OneByOne), typeof(TwoHor), typeof(TwoVer),
-            typeof(ThreHor), typeof(ThreVer),
-            typeof(FourHor), typeof(FourVer),
-            typeof(FiveHor), typeof(FiveVer),
-            typeof(LitleEL), typeof(LitleEL2), typeof(LitleEL3), typeof(LitleEL4),
-            typeof(EL), typeof(EL2), typeof(EL3), typeof(EL4), typeof(EL5), typeof(EL6), typeof(EL7), typeof(EL8),
-            typeof(BEL), typeof(BEL2), typeof(BEL3), typeof(BEL4),
-            typeof(Z1), typeof(Z2), typeof(Z3), typeof(Z4),
-            typeof(smallT1), typeof(smallT2), typeof(smallT3), typeof(smallT4),
-            typeof(T1), typeof(T2), typeof(T3), typeof(T4),
-            typeof(cube22), typeof(cube32), typeof(cube33),
-            typeof(blockx), typeof(blockX),
-            typeof(blockslash1), typeof(blockslash2),
-            typeof(blockSLASH1), typeof(blockSLASH2),
+                // Single block
+                typeof(OneByOne), 
+                
+                // Lines
+                typeof(TwoHor), typeof(TwoVer),
+                typeof(ThreHor), typeof(ThreVer),
+                typeof(FourHor), typeof(FourVer),
+                typeof(FiveHor), typeof(FiveVer),
+                
+                // EL shapes
+                typeof(LitleEL), typeof(LitleEL2), typeof(LitleEL3), typeof(LitleEL4),
+                typeof(EL), typeof(EL2), typeof(EL3), typeof(EL4), typeof(EL5), typeof(EL6), typeof(EL7), typeof(EL8),
+                typeof(BEL), typeof(BEL2), typeof(BEL3), typeof(BEL4),
+                
+                // Z shapes
+                typeof(Z1), typeof(Z2), typeof(Z3), typeof(Z4),
+                
+                // T shapes
+                typeof(smallT1), typeof(smallT2), typeof(smallT3), typeof(smallT4),
+                typeof(T1), typeof(T2), typeof(T3), typeof(T4),
+            
+                // Cubes
+                typeof(cube22), typeof(cube32), typeof(cube33),
+
+                // X shapes
+                typeof(blockx), typeof(blockX),
+                
+                // Slash blocks
+                typeof(blockSlash2_1), typeof(blockSlash2_2),
+                typeof(blockslash3_1), typeof(blockslash3_2),
+                typeof(blockSlash4_1), typeof(blockSlash4_2),
+                typeof(blockSlash5_1), typeof(blockSlash5_2),
         };
 
             public static Brick PickRandomClass(int place)

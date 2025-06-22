@@ -64,7 +64,7 @@ namespace Sharp_Blast
             font = Content.Load<SpriteFont>("Font");
 
             field = new Field(Content);
-            activeBricks = new Bricks(Content);
+            activeBricks = new Bricks(Content, GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }
@@ -153,8 +153,8 @@ namespace Sharp_Blast
             _spriteBatch.Draw(resetButtonTexture, new Rectangle(900, 200, 100, 100), Color.White);
 
             //scores
-            _spriteBatch.DrawString(font, Convert.ToString(score), new Vector2(100, 300), Color.White, 0, new Vector2(0, 0), 10.0f, SpriteEffects.None, 0.5f);
-            _spriteBatch.DrawString(font, Convert.ToString(highscore), new Vector2(100, 200), Color.Gold, 0, new Vector2(0, 0), 5.0f, SpriteEffects.None, 0.5f);
+            _spriteBatch.DrawString(font, Convert.ToString(highscore), new Vector2(100, 200), Color.Gold, 0, new Vector2(0, 0), 0.6f, SpriteEffects.None, 1.0f);
+            _spriteBatch.DrawString(font, Convert.ToString(score), new Vector2(100, 300), Color.Snow, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 1.0f);
 
             //end draw to custom render target
             _spriteBatch.End();
@@ -167,7 +167,8 @@ namespace Sharp_Blast
 
             GraphicsDevice.SetRenderTarget(null);
 
-            GraphicsDevice.Clear(new Color(66, 90, 164));
+            //GraphicsDevice.Clear(new Color(66, 90, 164));
+            GraphicsDevice.Clear(new Color(50, 50, 50));
 
             _spriteBatch.Begin();
 
