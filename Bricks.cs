@@ -63,7 +63,7 @@ namespace Sharp_Blast
             
             // kód pro manuální nastavení přiřazených kostek
 
-            //ActiveBricks = [(Brick)Activator.CreateInstance(typeof(EL5), 0), (Brick)Activator.CreateInstance(typeof(EL6), 1), (Brick)Activator.CreateInstance(typeof(EL8), 2)];
+            //ActiveBricks = [(Brick)Activator.CreateInstance(typeof(ThreHor), 0), (Brick)Activator.CreateInstance(typeof(FiveHor), 1), (Brick)Activator.CreateInstance(typeof(TwoHor), 2)];
 
         }
 

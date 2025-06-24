@@ -119,6 +119,10 @@ namespace Sharp_Blast
                         score = 0;
 
                     }
+
+                    
+
+                    
                 }
                 else if (Bricks.grabed > -1)
                 {
@@ -134,6 +138,13 @@ namespace Sharp_Blast
             }
 
             touchLocation_old = touchLocation;
+
+            /*AI:
+            * part2 in render
+            *
+            Field.pole = Bricks.prediction;
+            *
+            */
 
             score += field.checkField();
 
@@ -175,6 +186,13 @@ namespace Sharp_Blast
             _spriteBatch.Draw(screen, new Vector2(((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 540), ((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1140)), Color.White);
 
             _spriteBatch.End();
+
+            /* AI part2:
+             * part1 in update
+             *
+             Bricks.generateBricks();
+             *
+             */
 
             base.Draw(gameTime);
         }

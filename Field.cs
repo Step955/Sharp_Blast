@@ -36,14 +36,14 @@ namespace Sharp_Blast
         {
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(pole_texture, new Rectangle(Convert.ToInt32(50), Convert.ToInt32(500), 1000, 1000), Color.White);
+            _spriteBatch.Draw(pole_texture, new Rectangle(Convert.ToInt32(50), Convert.ToInt32(500), 997, 997), Color.White);
             _spriteBatch.End();
 
             for (int i = 0; i < pole.GetLength(0); i++)
             {
                 for (int j = 0; j < pole.GetLength(1); j++)
                 {
-                    Bricks.Squares.render(_spriteBatch, new Vector2(90 + (115 * j), 545 + (115 * i)), pole[j, i], 110);
+                    Bricks.Squares.render(_spriteBatch, new Vector2(87 + (116 * j), 537 + (116 * i)), pole[j, i], 111);
                 }
             }
 
@@ -103,6 +103,7 @@ namespace Sharp_Blast
 
                         if (result.Item1)
                         {
+                            // Kostka se vejde na pole
                             Bricks.prediction = result.Item2;
                             return true;
                         }
@@ -136,6 +137,7 @@ namespace Sharp_Blast
                 }
             }
             return (true, pole_filed);
+            
         }
 
         //funkce pro kontrolu plnosti pole
