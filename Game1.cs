@@ -141,9 +141,9 @@ namespace Sharp_Blast
 
             /*AI:
             * part2 in render
-            *
-            Field.pole = Bricks.prediction;
-            *
+            */
+            //Field.pole = Bricks.prediction;
+            /*
             */
 
             score += field.checkField();
@@ -189,9 +189,9 @@ namespace Sharp_Blast
 
             /* AI part2:
              * part1 in update
-             *
-             Bricks.generateBricks();
-             *
+             */
+             //Bricks.generateBricks();
+             /*
              */
 
             base.Draw(gameTime);

@@ -77,23 +77,39 @@ namespace Sharp_Blast
 
         public class Squares
         {
-            public static Texture2D Blue { get; private set; }
-            public static Texture2D DarkBlue { get; private set; }
-            public static Texture2D Green { get; private set; }
-            public static Texture2D Orange { get; private set; }
-            public static Texture2D Red { get; private set; }
-            public static Texture2D Yellow { get; private set; }
-            public static Texture2D Purple { get; private set; }
+            public static Texture2D texture1 { get; private set; }
+            public static Texture2D texture2 { get; private set; }
+            public static Texture2D texture3 { get; private set; }
+            public static Texture2D texture4 { get; private set; }
+            public static Texture2D texture5 { get; private set; }
+            public static Texture2D texture6 { get; private set; }
+            public static Texture2D texture7 { get; private set; }
 
             public Squares(ContentManager content)
             {
-                Blue = content.Load<Texture2D>("bricks\\blue");
-                DarkBlue = content.Load<Texture2D>("bricks\\dark_blue");
-                Green = content.Load<Texture2D>("bricks\\green");
-                Orange = content.Load<Texture2D>("bricks\\orange");
-                Red = content.Load<Texture2D>("bricks\\red");
-                Yellow = content.Load<Texture2D>("bricks\\yellow");
-                Purple = content.Load<Texture2D>("bricks\\purple");
+                //rainbow variants
+                
+                /*
+                texture1 = content.Load<Texture2D>("bricks\\blue");
+                texture2 = content.Load<Texture2D>("bricks\\dark_blue");
+                texture3 = content.Load<Texture2D>("bricks\\green");
+                texture4 = content.Load<Texture2D>("bricks\\orange");
+                texture5 = content.Load<Texture2D>("bricks\\red");
+                texture6 = content.Load<Texture2D>("bricks\\yellow");
+                texture7 = content.Load<Texture2D>("bricks\\purple");
+                */
+                
+                //wood variants
+
+
+                texture1 = content.Load<Texture2D>("woodBricks\\wood1");
+                texture2 = content.Load<Texture2D>("woodBricks\\wood2");
+                texture3 = content.Load<Texture2D>("woodBricks\\wood3");
+                texture4 = content.Load<Texture2D>("woodBricks\\wood4");
+                texture5 = content.Load<Texture2D>("woodBricks\\wood5");
+                texture6 = content.Load<Texture2D>("woodBricks\\wood6");
+                texture7 = content.Load<Texture2D>("woodBricks\\wood7");
+                
             }
 
             public static void render(SpriteBatch _spriteBatch, Microsoft.Xna.Framework.Vector2 cords, int color, int scale)
@@ -104,25 +120,25 @@ namespace Sharp_Blast
                     case 0:
                         break;
                     case 1:
-                        _spriteBatch.Draw(Blue, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
+                        _spriteBatch.Draw(texture1, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
                         break;
                     case 2:
-                        _spriteBatch.Draw(DarkBlue, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
+                        _spriteBatch.Draw(texture2, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
                         break;
                     case 3:
-                        _spriteBatch.Draw(Green, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
+                        _spriteBatch.Draw(texture3, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
                         break;
                     case 4:
-                        _spriteBatch.Draw(Orange, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
+                        _spriteBatch.Draw(texture4, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
                         break;
                     case 5:
-                        _spriteBatch.Draw(Red, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
+                        _spriteBatch.Draw(texture5, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
                         break;
                     case 6:
-                        _spriteBatch.Draw(Yellow, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
+                        _spriteBatch.Draw(texture6, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
                         break;
                     case 7:
-                        _spriteBatch.Draw(Purple, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
+                        _spriteBatch.Draw(texture7, new Rectangle(Convert.ToInt32(cords.X), Convert.ToInt32(cords.Y), scale, scale), Color.White);
                         break;
                 }
                 _spriteBatch.End();
