@@ -11,6 +11,9 @@ namespace Sharp_Blast
 
     public class Game1 : Game
     {
+        private GameScreen gameScreen;
+
+
         private Bricks activeBricks;
 
         private Field field;
@@ -56,13 +59,12 @@ namespace Sharp_Blast
 
         protected override void Initialize()
         {
+            /*
             touchLocation_old = TouchPanel.GetState();
 
             screen = new RenderTarget2D(GraphicsDevice, 1080, 2280);
 
             _spriteBatch = new SpriteBatch(base.GraphicsDevice);
-
-            base.Initialize();
 
             GraphicsDevice.Viewport = new Viewport(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
 
@@ -70,11 +72,17 @@ namespace Sharp_Blast
             int backH = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
             scale = Math.Min(backW / (float)screen.Width, backH / (float)screen.Height);
+            */
+
+            gameScreen = new GameScreen(base.GraphicsDevice, Content);
+
+            base.Initialize();
+
         }
 
         protected override void LoadContent()
         {
-
+            /*
             highscore = FileManager.load();
 
             resetButtonTexture = Content.Load<Texture2D>("reload");
@@ -83,15 +91,20 @@ namespace Sharp_Blast
             field = new Field(Content);
             activeBricks = new Bricks(Content, GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            */
+
+            gameScreen.Ĺoad();
         }
 
         protected override void Update(GameTime gameTime)
         {
+            
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            
 
             //field = new Field(Content);
 
@@ -101,6 +114,8 @@ namespace Sharp_Blast
 
             TouchCollection touchLocation = TouchPanel.GetState();
 
+            gameScreen.Update(touchLocation, GraphicsDevice);
+            /*
             if (touchLocation.Count > 0)
             {
 
@@ -162,16 +177,19 @@ namespace Sharp_Blast
             * part2 in render
             */
             //Field.pole = Bricks.prediction;
-            /*
+            /* 
             */
 
-            score += field.checkField();
+
+            //score += field.checkField();
+
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            /*
             //start draw to custom render target
             GraphicsDevice.SetRenderTarget(screen);
 
@@ -230,6 +248,8 @@ namespace Sharp_Blast
              //Bricks.generateBricks();
              /*
              */
+
+            gameScreen.Draw();
 
             base.Draw(gameTime);
         }
