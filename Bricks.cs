@@ -157,7 +157,7 @@ namespace Sharp_Blast
             protected Brick(int Place)
             {
                 Color = random.Next(1, 8);
-                Rect = new Rectangle(((Bricks.GraphicsDevice.PresentationParameters.BackBufferWidth / 4) * (Place + 1)), y, 100, 100);
+                Rect = new Rectangle((180 + (320 * Place)), y, 100, 100);
                 //Rect = new Rectangle(180 + (320 * Place), y, 100, 100);
             }
 

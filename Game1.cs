@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Android.Icu.Number;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
+using System.Diagnostics;
 
 namespace Sharp_Blast
 {
@@ -26,6 +28,16 @@ namespace Sharp_Blast
 
         private static int score = 0;
         private static int highscore = 0;
+
+        private float scale;
+
+        private enum ScaleMode
+        {
+            StretchToFill,
+            PreserveAspectFit
+        }
+
+        private ScaleMode _scaleMode = ScaleMode.PreserveAspectFit;
 
         public Game1()
         {
@@ -53,6 +65,11 @@ namespace Sharp_Blast
             base.Initialize();
 
             GraphicsDevice.Viewport = new Viewport(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
+
+            int backW = GraphicsDevice.PresentationParameters.BackBufferWidth;
+            int backH = GraphicsDevice.PresentationParameters.BackBufferHeight;
+
+            scale = Math.Min(backW / (float)screen.Width, backH / (float)screen.Height);
         }
 
         protected override void LoadContent()
@@ -91,7 +108,9 @@ namespace Sharp_Blast
 
                 if (touchLocation_old.Count == 0)
                 {
-                    if (touchLocation[0].Position.Y > 1700)
+                    Vector2 recalculatedTouch = ScreenToRenderTarget(touchLocation[0].Position);
+                    Rectangle resetRect = new Rectangle(900, 200, 100, 100);
+                    if (touchLocation[0].Position.Y > (GraphicsDevice.PresentationParameters.BackBufferHeight/3)*2)
                     {
 
                         if (touchLocation[0].Position.X < GraphicsDevice.PresentationParameters.BackBufferWidth / 3)
@@ -107,7 +126,7 @@ namespace Sharp_Blast
                             Bricks.grabed = 2;
                         }
                     }
-                    else if (new Rectangle(900 + ((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 540), 200 + ((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1140), 100, 100).Contains(touchLocation[0].Position))
+                    else if (resetRect.Contains(ScreenToRenderTarget(touchLocation[0].Position)))
                     {
                         Bricks.generateBricks();
                         Field.pole = new int[8, 8];
@@ -126,7 +145,7 @@ namespace Sharp_Blast
                 }
                 else if (Bricks.grabed > -1)
                 {
-                    Bricks.ActiveBricks[Bricks.grabed].setCords(Convert.ToInt32(touchLocation[0].Position.X - ((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 490)), Convert.ToInt32(touchLocation[0].Position.Y - ((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1090) - 300));
+                    Bricks.ActiveBricks[Bricks.grabed].setCords(Convert.ToInt32((touchLocation[0].Position.X / scale) - ((GraphicsDevice.PresentationParameters.BackBufferWidth/24*scale)) ), Convert.ToInt32((touchLocation[0].Position.Y/scale)-(GraphicsDevice.PresentationParameters.BackBufferHeight / 4 / scale)));
                 }
 
             }
@@ -136,7 +155,7 @@ namespace Sharp_Blast
                 Bricks.ActiveBricks[Bricks.grabed].resetCords(Bricks.grabed);
                 Bricks.grabed = -1;
             }
-
+           
             touchLocation_old = touchLocation;
 
             /*AI:
@@ -181,10 +200,28 @@ namespace Sharp_Blast
             //GraphicsDevice.Clear(new Color(66, 90, 164));
             GraphicsDevice.Clear(new Color(50, 50, 50));
 
-            _spriteBatch.Begin();
+            // compute destination rectangle depending on chosen scale mode
+            int backW = GraphicsDevice.PresentationParameters.BackBufferWidth;
+            int backH = GraphicsDevice.PresentationParameters.BackBufferHeight;
+            Rectangle destRect;
 
-            _spriteBatch.Draw(screen, new Vector2(((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - 540), ((GraphicsDevice.PresentationParameters.BackBufferHeight / 2) - 1140)), Color.White);
+            if (_scaleMode == ScaleMode.StretchToFill)
+            {
+                // Stretch to fill full backbuffer (may change aspect ratio)
+                destRect = new Rectangle(0, 0, backW, backH);
+            }
+            else
+            {
+                // Preserve aspect ratio and center (letterbox / pillarbox)
+                scale = Math.Min(backW / (float)screen.Width, backH / (float)screen.Height);
+                int drawW = (int)(screen.Width * scale);
+                int drawH = (int)(screen.Height * scale);
+                destRect = new Rectangle((backW - drawW) / 2, (backH - drawH) / 2, drawW, drawH);
+            }
 
+            // Use PointClamp for pixel-perfect scaling (or LinearClamp for smooth)
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Draw(screen, destRect, Color.White);
             _spriteBatch.End();
 
             /* AI part2:
@@ -196,5 +233,43 @@ namespace Sharp_Blast
 
             base.Draw(gameTime);
         }
+
+        private Vector2 ScreenToRenderTarget(Vector2 screenPosition)
+        {
+            if (screen == null) return screenPosition;
+
+            int backW = GraphicsDevice.PresentationParameters.BackBufferWidth;
+            int backH = GraphicsDevice.PresentationParameters.BackBufferHeight;
+
+            if (_scaleMode == ScaleMode.StretchToFill)
+            {
+                // mapujeme přímo podle poměrů šířek/výšek
+                float sx = screen.Width / (float)backW;
+                float sy = screen.Height / (float)backH;
+                return new Vector2(screenPosition.X * sx, screenPosition.Y * sy);
+            }
+            else
+            {
+                // zachování poměru stran + vystředění (letterbox/pillarbox)
+                float s = Math.Min(backW / (float)screen.Width, backH / (float)screen.Height);
+                float drawW = screen.Width * s;
+                float drawH = screen.Height * s;
+                float offsetX = (backW - drawW) / 2f;
+                float offsetY = (backH - drawH) / 2f;
+
+                // převedeme pozici do lokálních souřadnic vykresleného render targetu a pak do souřadnic render targetu
+                float localX = (screenPosition.X - offsetX) / s;
+                float localY = (screenPosition.Y - offsetY) / s;
+
+                return new Vector2(localX, localY);
+            }
+        }
+
+        private Point ScreenToRenderTargetPoint(Point screenPoint)
+        {
+            Vector2 v = ScreenToRenderTarget(new Vector2(screenPoint.X, screenPoint.Y));
+            return new Point((int)Math.Floor(v.X), (int)Math.Floor(v.Y));
+        }
+
     }
 }
