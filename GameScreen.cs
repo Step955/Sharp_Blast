@@ -193,6 +193,16 @@ namespace Sharp_Blast
             score += field.checkField();
 
         }
+
+        public void exit()
+        {
+            if (score > highscore)
+            {
+                FileManager.save(score);
+                
+            }
+        }
+
         private Vector2 ScreenToRenderTarget(Vector2 screenPosition)
         {
             if (screen == null) return screenPosition;

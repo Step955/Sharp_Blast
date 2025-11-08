@@ -101,7 +101,7 @@ namespace Sharp_Blast
                 
                 //wood variants
 
-
+                
                 texture1 = content.Load<Texture2D>("woodBricks\\wood1");
                 texture2 = content.Load<Texture2D>("woodBricks\\wood2");
                 texture3 = content.Load<Texture2D>("woodBricks\\wood3");
@@ -158,7 +158,6 @@ namespace Sharp_Blast
             {
                 Color = random.Next(1, 8);
                 Rect = new Rectangle((180 + (320 * Place)), y, 100, 100);
-                //Rect = new Rectangle(180 + (320 * Place), y, 100, 100);
             }
 
             public void setCords(int x, int y)
