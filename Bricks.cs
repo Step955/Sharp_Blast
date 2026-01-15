@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Sharp_Blast
 {
@@ -55,11 +56,11 @@ namespace Sharp_Blast
             }
         }
 
-        public static void generateBricks()
+        public async static Task generateBricks()
         {
             prediction = (int[,])Field.pole.Clone();
             
-            ActiveBricks = [BlockFactory.PickRandomClass(0), BlockFactory.PickRandomClass(1), BlockFactory.PickRandomClass(2)];
+            ActiveBricks = [ await BlockFactory.PickRandomClass(0), await BlockFactory.PickRandomClass(1), await BlockFactory.PickRandomClass(2)];
             
             // kód pro manuální nastavení přiřazených kostek
 
@@ -790,7 +791,7 @@ namespace Sharp_Blast
                 typeof(blockSlash5_1), typeof(blockSlash5_2),
         };
 
-            public static Brick PickRandomClass(int place)
+            public async static Task<Brick> PickRandomClass(int place)
             {
                 int index = random.Next(blockTypes.Length);
 

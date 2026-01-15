@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
+using System.Threading.Tasks;
+using Javax.Security.Auth;
 namespace Sharp_Blast
 {
     public class Field
@@ -49,16 +51,17 @@ namespace Sharp_Blast
 
             /*
              * Kód pro vyrenderování collision pointů (levý horní roh čtverců)
-             *
+             
             for (int i = 150; i < 990; i += 115)
             {
                 for (int j = 600; j < 1500; j += 115)
                 {
-                    Bricks.Squares.render(_spriteBatch, new Vector2(i, j), 3, 10);
+                    Bricks.Squares.render(_spriteBatch, new Vector2(i-10, j-10), 3, 20);
 
                 }
             }
-            */
+           *
+             */
         }
 
         // Funkce pro umístění kostky na pole po pustění hráčem
@@ -137,12 +140,14 @@ namespace Sharp_Blast
                 }
             }
             return (true, pole_filed);
-            
+
         }
 
         //funkce pro kontrolu plnosti pole
         public int checkField()
         {
+
+
             //tvorba potřebných proměných
             int[,] clearedField = (int[,])pole.Clone();
 
@@ -209,5 +214,89 @@ namespace Sharp_Blast
             pole = clearedField;
             return score;
         }
+
+        public async Task<int> checkFieldAsync()
+        {
+            int[,] clearedField = (int[,])pole.Clone();
+
+            int score = 0;
+
+            Task<int> lineTask = Task.Run(() => CheckRow(score, clearedField));
+            Task<int> columnTask = Task.Run(() => CheckColumn(score, clearedField));
+
+            Task.WaitAll(lineTask, columnTask);
+
+            pole = clearedField;
+            score += lineTask.Result;
+            score += columnTask.Result;
+
+            return score;
+        }
+
+        private async Task<int> CheckRow(int score, int[,] clearedField)
+        {
+            bool contains = false;
+
+            for (int i = 0; i < pole.GetLength(0); i++)
+            {
+                for (int j = 0; j < pole.GetLength(1); j++)
+                {
+                    if (pole[i, j] == 0)
+                    {
+                        contains = true;
+                        break;
+                    }
+                    else
+                    {
+                        contains = false;
+                    }
+                }
+
+                if (contains == false)
+                {
+                    for (int j = 0; j < pole.GetLength(1); j++)
+                    {
+                        clearedField[i, j] = 0;
+                    }
+                    score += 80;
+                    contains = true;
+                }
+            }
+
+
+            return score;
+        }
+
+        private async Task<int> CheckColumn(int score, int[,] clearedField)
+        {
+            bool contains = false;
+            for (int i = 0; i < pole.GetLength(0); i++)
+            {
+                for (int j = 0; j < pole.GetLength(1); j++)
+                {
+                    if (pole[j, i] == 0)
+                    {
+                        contains = true;
+                        break;
+                    }
+                    else
+                    {
+                        contains = false;
+                    }
+                }
+                if (contains == false)
+                {
+                    for (int j = 0; j < pole.GetLength(1); j++)
+                    {
+                        clearedField[j, i] = 0;
+                        score += 90;
+                        contains = true;
+                    }
+                }
+            }
+            return score;
+        }
     }
 }
+
+

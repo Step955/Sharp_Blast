@@ -1,10 +1,8 @@
-﻿using Android.Icu.Number;
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using System;
-using System.Diagnostics;
 
 namespace Sharp_Blast
 {

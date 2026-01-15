@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace Sharp_Blast
@@ -121,7 +122,7 @@ namespace Sharp_Blast
             _spriteBatch.End();
         }
 
-        public void Update(TouchCollection touchLocation, GraphicsDevice graphicsDevice)
+        public async Task Update(TouchCollection touchLocation, GraphicsDevice graphicsDevice)
         {
 
             GraphicsDevice = graphicsDevice;
@@ -190,7 +191,7 @@ namespace Sharp_Blast
             /*
             */
 
-            score += field.checkField();
+            score += await field.checkFieldAsync();
 
         }
 
